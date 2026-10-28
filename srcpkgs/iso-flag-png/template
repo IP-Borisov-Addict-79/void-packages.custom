@@ -1,0 +1,15 @@
+pkgname=iso-flag-png
+version=1.0.4
+revision=1
+short_desc="ISO country flags in png format"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/linuxmint/flags"
+distfiles="https://github.com/linuxmint/flags/archive/refs/tags/${version}.tar.gz"
+wrksrc="flags-${version}"
+checksum=0df77567804cb3e6f000a0590a445dfa96b69ef7d9f46381ddc8d5c22e602616
+
+do_install() {
+	mkdir -p ${DESTDIR}/usr/share/${pkgname}
+	vcopy usr/share/${pkgname}/*.png usr/share/${pkgname}
+}
