@@ -1,37 +1,45 @@
 # Custom package templates for Void Linux
 
-Some packages absent from official Void repositories.
+XBPS templates for packages that are not included in the official Void repositories (and, very likely, will never be included).
 
-Contents:
+Package list:
 
- - iso-flag-png: ISO flags collection for Cinnamon desktop (<https://github.com/linuxmint/flags>)
- - TBD.
+ - [iso-flag-png](https://github.com/linuxmint/flags): ISO flags collection for Cinnamon desktop (keyboard layout switcher);
+ - [ttf-jetbrains-mono](https://www.jetbrains.com/lp/mono/): a set of nice monospace fonts from JetBrains;
+ - _TBD..._
 
 ## Usage
 
-1. Clone the XBPS source packages collection:
+1. Install XBPS helpers (`xnew`, `xi`, etc.):
+
+   ```
+   xbps-install -S xtools
+   ```
+
+2. Clone the XBPS source packages collection:
  
    ```
    git clone https://github.com/void-linux/void-packages.git`
    ```
    
-2. Bootstrap the `masterdir`:
+3. Bootstrap the `masterdir`:
 
    ```
    cd void-packages
    ./xbps-src binary-bootstrap`
    ```
    
-3. Copy custom package templates to void-packages source-tree
+4. Copy custom package templates to void-packages source-tree
 
    ```
-   cp -r ../void-packages.custom/srcpkgs/* srcpkgs
+   cp -r PATH-TO/void-packages.custom/srcpkgs/* srcpkgs
    ```
    
-4. Build and install desired packages:
+5. Build and install the desired packages:
 
    ```
    ./xbps-src pkg iso-flag-png
+   ...
    xi -f iso-flag-png
    ```
 
@@ -39,3 +47,4 @@ Contents:
 
 - [The XBPS source packages manual](https://github.com/void-linux/void-packages/blob/master/Manual.md)
 - [Xbps-src packaging tutorial](https://xbps-src-tutorials.github.io/packaging/index.html)
+- [Xbps-src tips and tricks](https://xbps-src-tutorials.github.io/tips-and-tricks.html)
