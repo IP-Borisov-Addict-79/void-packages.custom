@@ -6,7 +6,7 @@ Package list:
 
  - [iso-flag-png](https://github.com/linuxmint/flags): ISO flags collection for Cinnamon desktop (keyboard layout switcher);
  - [JetBrains Mono](https://www.jetbrains.com/lp/mono/): a set of nice monospace fonts from JetBrains;
- - [clhep](https://proj-clhep.web.cern.ch/proj-clhep/): A Class Library for High Energy Physics. Since no sane person interested in HEP-related computations would install only runtime-part of the library while skipping the development-related parts, a meta-package was created that upon installation would pull-up runtime and development files as dependencies:
+ - [clhep](https://proj-clhep.web.cern.ch/proj-clhep/): A Class Library for High Energy Physics. **The XBPS source packages manual** insists that [_...libraries have to be split into two sub packages: `<name>` and `<name>-devel`_](https://github.com/void-linux/void-packages/blob/master/Manual.md#libs). But since no sane person interested in HEP-related computations would install only runtime part of CLHEP while skipping the development-related bits, a meta-package was created that would pull-up both runtime and development files as dependencies:
      - libclhep: runtime files,
      - libclhep-devel: development files;
  - libclhep-doc: documentation for CLHEP;

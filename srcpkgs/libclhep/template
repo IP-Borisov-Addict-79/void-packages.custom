@@ -57,6 +57,6 @@ libclhep-doc_package() {
 clhep_package() {
 	metapackage=yes
 	depends="libclhep>=${version} libclhep-devel>=${version}"
-	short_desc=" - runtime and development packages"
+	short_desc+=" - runtime and development files"
 	license="Public Domain"
 }

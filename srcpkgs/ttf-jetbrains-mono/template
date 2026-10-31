@@ -14,5 +14,5 @@ checksum=d8dab5ff24fc9e345d6c7987f2746cf8df4f870561ea89c14630b8d1729fd727
 
 do_install() {
 	vmkdir usr/share/fonts/TTF
-	install -m644 fonts/ttf/*.ttf ${DESTDIR}/usr/share/fonts/TTF
+	install -m644 fonts/ttf/*.ttf ${DESTDIR}/${font_dirs}
 }
