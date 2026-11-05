@@ -10,11 +10,29 @@ maintainer="Artem Sabourov <vs.tema@gmail.com>"
 license="GPL-3.0-or-later AND LGPL-3.0-or-later"
 homepage="http://proj-clhep.web.cern.ch/"
 distfiles="http://proj-clhep.web.cern.ch/proj-clhep/dist1/${pkgname}-${version}.tgz"
-wrksrc="${version}"
 checksum=1c8304a7772ac6b99195f1300378c6e3ddf4ad07c85d64a04505652abb8a55f9
 
+# Strangely, XBPS tools cannot autodetect the provided sonames, causing errors
+# during compilation of dependent packages (e.g. geant4)
+shlib_provides="libCLHEP-2.4.7.1.so
+ libCLHEP-Cast-2.4.7.1.so
+ libCLHEP-Evaluator-2.4.7.1.so
+ libCLHEP-Exceptions-2.4.7.1.so
+ libCLHEP-GenericFunctions-2.4.7.1.so
+ libCLHEP-Geometry-2.4.7.1.so
+ libCLHEP-Matrix-2.4.7.1.so
+ libCLHEP-Random-2.4.7.1.so
+ libCLHEP-RandomObjects-2.4.7.1.so
+ libCLHEP-RefCount-2.4.7.1.so
+ libCLHEP-Vector-2.4.7.1.so
+ libCLHEP.so"
+
+# The source tarball contains non-standard directory structure:
+# clhep-VERSION.tgz -> version/CLHEP, hence - subsequent explicit `do_...()` fuckery
+wrksrc="${version}"
+
+# We're building from non-standard src-tree...
 do_configure() {
-	mkdir -p build
 	cmake -S CLHEP -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCLHEP_BUILD_DOCS=ON
 }
 
@@ -31,6 +49,7 @@ do_install() {
 }
 
 post_install() {
+	# clean up documentation install paths
 	mv ${DESTDIR}/usr/share/doc/CLHEP ${DESTDIR}/usr/share/doc/clhep
 	mv ${DESTDIR}/usr/share/doc/clhep/Doxygen/html ${DESTDIR}/usr/share/doc/clhep/html
 	rm -r ${DESTDIR}/usr/share/doc/clhep/Doxygen
