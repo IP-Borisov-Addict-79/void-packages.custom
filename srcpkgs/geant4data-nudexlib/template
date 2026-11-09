@@ -1,0 +1,47 @@
+# Template file for 'geant4data-nudexlib'
+pkgname=geant4data-nudexlib
+version=1.0
+revision=1
+depends="bash"
+short_desc="Geant4 - data for NuDEX model"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4NUDEXLIB
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=cac7d65e9c5af8edba2b2667d5822e16aaf99065c95f805e76de4cc86395f415
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	cp -r * ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	mv ${DESTDIR}/${DS_PATH}/README ${DESTDIR}/usr/share/doc/${pkgname}
+	mv ${DESTDIR}/${DS_PATH}/History ${DESTDIR}/usr/share/doc/${pkgname}
+	#
+	install -d ${DESTDIR}/usr/share/doc/${pkgname}/KnownLevels
+	mv ${DESTDIR}/${DS_PATH}/KnownLevels/levels* ${DESTDIR}/usr/share/doc/${pkgname}/KnownLevels
+	#
+	install -d ${DESTDIR}/usr/share/doc/${pkgname}/LevelDensities
+	mv ${DESTDIR}/${DS_PATH}/LevelDensities/*readme* ${DESTDIR}/usr/share/doc/${pkgname}/LevelDensities
+	#
+	install -d ${DESTDIR}/usr/share/doc/${pkgname}/PSF
+	mv ${DESTDIR}/${DS_PATH}/PSF/*.readme ${DESTDIR}/usr/share/doc/${pkgname}/PSF
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

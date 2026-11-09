@@ -1,0 +1,49 @@
+# Template file for 'geant4data-tendl'
+pkgname=geant4data-tendl
+version=1.4
+revision=1
+depends="bash"
+short_desc="Geant4 - data library representing the output of the TALYS nuclear model"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4TENDL
+DS_ENV=TENDLDATA
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=4b7274020cc8b4ed569b892ef18c2e088edcdb6b66f39d25585ccee25d9721e0
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	cp -r * ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc ${FILESDIR}/README.voidlinux
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	for N in Alpha Deuteron He3 Proton Triton; do
+		install -d ${DESTDIR}/usr/share/doc/${pkgname}/${N}
+		mv ${DESTDIR}/${DS_PATH}/${N}/README ${DESTDIR}/usr/share/doc/${pkgname}/${N}
+		#
+		# prevent xbps-src from removing empty directories
+		find ${DESTDIR}/${DS_PATH}/${N} -type d -empty | while read SN; do
+			touch ${SN}/__delete_me__
+		done
+	done
+	#
+	mv ${DESTDIR}/${DS_PATH}/README ${DESTDIR}/usr/share/doc/${pkgname}
+	mv ${DESTDIR}/${DS_PATH}/History ${DESTDIR}/usr/share/doc/${pkgname}
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

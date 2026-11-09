@@ -1,0 +1,10 @@
+# Template file for 'geant4data-extra'
+pkgname=geant4data-extra
+version=11.4.3
+revision=1
+depends="geant4data-nudexlib>=1.0 geant4data-tendl>=1.4 geant4data-urrpt>=1.1"
+short_desc="Geant4 - additional data - for NuDEX, TENDL and URRPT"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+homepage="http://geant4.cern.ch/"
+metapackage=yes
+license="Public Domain"

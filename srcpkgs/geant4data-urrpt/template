@@ -1,0 +1,38 @@
+# Template file for 'geant4data-urrpt'
+pkgname=geant4data-urrpt
+version=1.1
+revision=1
+depends="bash"
+short_desc="Geant4 - data for low-energy neutrons in the unresolved resonance region"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4URRPT
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=6a3432db80bc088aee19c504b9c0124913005d6357ea14870451400ab20d9c11
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	cp -r * ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	mv ${DESTDIR}/${DS_PATH}/README ${DESTDIR}/usr/share/doc/${pkgname}
+	mv ${DESTDIR}/${DS_PATH}/History ${DESTDIR}/usr/share/doc/${pkgname}
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}
