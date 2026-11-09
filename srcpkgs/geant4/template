@@ -1,4 +1,4 @@
-# Template file for 'libgeant4'
+# Template file for 'geant4'
 pkgname=geant4
 version=11.4.3
 revision=1
@@ -18,7 +18,7 @@ configure_args="-D CMAKE_INSTALL_PREFIX=/usr
 hostmakedepends="cmake"
 makedepends="clhep-devel expat-devel libxerces-c-devel qt6-base-devel
  glu-devel motif-devel zlib-devel python3 boost-devel-minimal libXmu-devel"
-depends="bash"
+depends="bash python3"
 short_desc="Simulation toolkit for particle physics interactions"
 maintainer="Artem Sabourov <vs.tema@gmail.com>"
 license="Geant4 software license, g4/tools license"
@@ -27,29 +27,25 @@ distfiles="https://gitlab.cern.ch/${pkgname}/${pkgname}/-/archive/v${version}/${
 checksum=718752c1829cbfcf174f0e539d60ee3f76843b894444e61d2228d66a6887ef6e
 restricted=yes
 repository=nonfree
-wrksrc="${pkgname}4-v${version}"
 
 # geant4 depends on libCLHEP-2.4.7.1.so provided by clhep-2.4.7.1_1 package,
-# but XBPS tools cannot map soname to a package automatically and the build
+# but XBPS tools cannot map soname to a package automatically, and the build
 # fails. To build geant4 package successfully, add the following mapping string
 # in `common/shlibs`:
 #
 #     libCLHEP-2.4.7.1.so clhep-2.4.7.1_1
 #
-# Note that new mappings should be added in `common/shlib` in _alphabetical
-# order_ (this is a stylistical requirement, not technical one).
 
 post_install() {
 	# install licenses, clean extra copies
 	vlicense LICENSE
-	vlicense CITATION.cff
 	vlicense source/externals/g4tools/tools.license
 	rm ${DESTDIR}/usr/share/Geant4/tools.license
 	#
 	# move documentation & examples to appropriate path
-	mkdir -p ${DESTDIR}/usr/share/doc/${pkgname}
-	cp README.rst ${DESTDIR}/usr/share/doc/${pkgname}
-	cp CONTRIBUTING.rst ${DESTDIR}/usr/share/doc/${pkgname}
+	vdoc README.rst
+	vdoc CONTRIBUTING.rst
+	vdoc CITATION.cff
 	cp -r ReleaseNotes ${DESTDIR}/usr/share/doc/${pkgname}/ChangeLogs
 	mv ${DESTDIR}/usr/share/Geant4/examples ${DESTDIR}/usr/share/doc/${pkgname}
 	#
@@ -59,7 +55,7 @@ post_install() {
 	#
 	# fix she-bangs in some python scripts in examples (we cannot resolve
 	# packages-sonames, but somehow can detect obsolete sha-bangs in
-	# documentation of all places)
+	# the documentation of all places)
 	grep -inr '#!/usr/bin/env python' ${DESTDIR}/usr/share/doc/${pkgname}/examples/ | \
 		grep -v python3 | cut -d: -f1 | \
 		while read PY; do
@@ -97,7 +93,19 @@ geant4-fonts_package() {
 
 geant4-all_package() {
 	metapackage=yes
-	depends="geant4>=${version} geant4-devel>=${version} geant4-fonts>=${version}"
+	depends="geant4>=${version} geant4-devel>=${version} geant4-fonts>=${version}
+	 geant4data-abla>=3.3
+	 geant4data-incl>=1.3
+	 geant4data-radioactivedecay>=6.1.2
+	 geant4data-channeling>=2.0
+	 geant4data-ndl>=4.7.1
+	 geant4data-realsurface>=2.2
+	 geant4data-emlow>=8.8
+	 geant4data-particlexs>=4.2
+	 geant4data-saiddata>=2.0
+	 geant4data-ensdfstate>=3.0
+	 geant4data-photonevaporation>=6.1.2
+	 geant4data-pii>=1.3"
 	short_desc+=" - complete set"
 	license="Public Domain"
 }
