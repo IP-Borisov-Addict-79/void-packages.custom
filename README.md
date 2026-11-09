@@ -6,11 +6,8 @@ Package list:
 
  - [iso-flag-png](https://github.com/linuxmint/flags): ISO flags collection for Cinnamon desktop (keyboard layout switcher);
  - [JetBrains Mono](https://www.jetbrains.com/lp/mono/): a set of nice monospace fonts from JetBrains;
- - [clhep](https://proj-clhep.web.cern.ch/proj-clhep/): A Class Library for High Energy Physics. **The XBPS source packages manual** insists that [_...libraries have to be split into two sub packages: `<name>` and `<name>-devel`_](https://github.com/void-linux/void-packages/blob/master/Manual.md#libs). But since no sane person interested in HEP-related computations would install only runtime part of CLHEP while skipping the development-related bits, a meta-package was created that would pull-up both runtime and development files as dependencies:
-     - clhep-all: installs runtime and development files,
-     - clhep-devel: development files;
- - clhep-doc: documentation for CLHEP;
- - _TBD..._
+ - [clhep](https://proj-clhep.web.cern.ch/proj-clhep/): A Class Library for High Energy Physics;
+ - [geant4](https://geant4.web.cern.ch/): Toolkit for the simulation of the passage of particles through matter.
 
 ## Usage
 
@@ -53,6 +50,54 @@ Package list:
    xi -f iso-flag-png
    ```
 
+## Building Geant4
+
+1. Build and install `clhep`-related packages:
+
+   ```
+   ./xbps-src pkg clhep
+   ...
+   xi -f clhep-all
+   ```
+   
+2. Add `clhep` - `libCLHEP*.so` mapping to the `common/shlibs` file:
+
+   ```
+   libCLHEP-2.4.7.1.so clhep-2.4.7.1_1
+   ```
+
+3. Build packages with Geant4 data:
+
+   ```
+   find srcpkgs -type d -name "geant4data-*" | cut -d'/' -f2 | while read P; do
+       ./xbps-src pkg ${P}
+   done
+   ```
+   
+   3.1 Install packages with essential data:
+   
+       ```
+       xi -f geant4data-saiddata geant4data-particlexs geant4data-ensdfstate \
+           geant4data-extra geant4data-channeling geant4data-tendl \
+           geant4data-radioactivedecay geant4data-pii geant4data-realsurface \
+           geant4data-abla geant4data-incl geant4data-emlow \
+           geant4data-photonevaporation
+       ```
+
+4. Build and install complete set of Geant4:
+
+   ```
+   ./xbps-src pkg geant4
+   ...
+   xi -f geant4-all
+   ```
+   
+5. Optionally: install additional Geant4 data:
+
+   ```
+   xi -f geant4data-extra
+   ```
+   
 ## Useful links:
 
 - [The XBPS source packages manual](https://github.com/void-linux/void-packages/blob/master/Manual.md)
