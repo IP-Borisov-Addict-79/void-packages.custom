@@ -26,6 +26,12 @@ Package list:
    git clone https://github.com/void-linux/void-packages.git`
    ```
    
+   2.1 To allow installing non-free packages, add following line to `etc/conf` file:
+   
+       ```
+       XBPS_ALLOW_RESTRICTED=yes
+       ```
+   
 3. Bootstrap the `masterdir`:
 
    ```
