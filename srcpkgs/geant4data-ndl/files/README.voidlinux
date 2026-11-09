@@ -1,0 +1,5 @@
+Some directories of the NDL dataset (`/usr/share/Geant4/data/G4NDL4.7.1`)
+contain empty `__delete_me__` files. These files were created in directories
+that were empty in the original dataset - to prevent `xbps-src` from removing
+them during creation of the package. These files must be removed, either
+manually or with `find` utility.

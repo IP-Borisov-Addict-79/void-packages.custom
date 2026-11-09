@@ -1,0 +1,37 @@
+# Template file for 'geant4data-particlexs'
+pkgname=geant4data-particlexs
+version=4.2
+revision=1
+depends="bash"
+short_desc="Geant4 - neutron, gamma and light ion cross sections"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4PARTICLEXS
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=c52bbf86aaa589b78aba80b16ab0adf1041ea300de5395865b97fcee6eb55851
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	mv * ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc ${FILESDIR}/data_files_citations.html
+	mv ${DESTDIR}/${DS_PATH}/README ${DESTDIR}/usr/share/doc/${pkgname}
+	mv ${DESTDIR}/${DS_PATH}/History ${DESTDIR}/usr/share/doc/${pkgname}
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

@@ -1,0 +1,37 @@
+# Template file for 'geant4data-incl'
+pkgname=geant4data-incl
+version=1.3
+revision=1
+depends="bash"
+short_desc="Geant4 - proton and neutron density profiles for INCL++ model"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4INCL
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=e4b3dbe52acef53536454e22443091212843821bd23628eed846d299599f3bf9
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.dat ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc README
+	vdoc History
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

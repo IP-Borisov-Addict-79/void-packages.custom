@@ -1,0 +1,37 @@
+# Template file for 'geant4data-photonevaporation'
+pkgname=geant4data-photonevaporation
+version=6.1.2
+revision=1
+depends="bash"
+short_desc="Geant4 - dataset for photon evaporation"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4PhotonEvaporation
+DS_ENV=G4LEVELGAMMADATA
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=02149c0ab91d88ee24e78532558777e39a068b9fcdd199136101ff58e635e742
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.* ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc README-LevelGammaData
+	vdoc History
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

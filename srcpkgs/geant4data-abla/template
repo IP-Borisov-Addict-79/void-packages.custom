@@ -1,0 +1,36 @@
+# Template file for 'geant4data-abla'
+pkgname=geant4data-abla
+version=3.3
+revision=1
+depends="bash"
+short_desc="Geant4 - dataset for nuclear shell effects"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4ABLA
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=1e041b3252ee9cef886d624f753e693303aa32d7e5ef3bba87b34f36d92ea2b1
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.dat ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc ${FILESDIR}/data_files_citations.html
+	vdoc README
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

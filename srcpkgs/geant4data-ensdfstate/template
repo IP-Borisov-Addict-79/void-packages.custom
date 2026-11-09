@@ -1,0 +1,37 @@
+# Template file for 'geant4data-ensdfstate'
+pkgname=geant4data-ensdfstate
+version=3.0
+revision=1
+depends="bash"
+short_desc="Geant4 - nuclei properties from the ENSDF"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4ENSDFSTATE
+DS_ENV="${DS_NAME}DATA"
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=4bdc3bd40b31d43485bf4f87f055705e540a6557d64ed85c689c59c9a4eba7d6
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.dat ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc README
+	vdoc History
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

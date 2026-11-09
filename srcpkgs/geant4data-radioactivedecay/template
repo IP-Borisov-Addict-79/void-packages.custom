@@ -1,0 +1,37 @@
+# Template file for 'geant4data-radioactivedecay'
+pkgname=geant4data-radioactivedecay
+version=6.1.2
+revision=1
+depends="bash"
+short_desc="Geant4 - dataset for radioactive decay schemes"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4RadioactiveDecay
+DS_ENV=G4RADIOACTIVEDATA
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=a40d7e3ebc64d35555c4a49d0ff1e0945cd605d84354d053121293914caea13a
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.* ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	vdoc README_RDM
+	vdoc History
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

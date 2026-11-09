@@ -1,0 +1,42 @@
+# Template file for 'geant4data-ndl'
+pkgname=geant4data-ndl
+version=4.7.1
+revision=1
+depends="bash"
+short_desc="Geant4 - neutron data library"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4NDL
+DS_ENV=G4NEUTRONHPDATA
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=d3acae48622118d2579de24a54d533fb2416bf0da9dd288f1724df1485a46c7c
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	cp -r * ${DESTDIR}/${DS_PATH}
+	#
+	# prevent xbps-src from removin empty directories
+	find ${DESTDIR}/${DS_PATH} -type d -empty | while read DS; do
+		touch ${DS}/__delete_me__
+	done
+	#
+	# install docs
+	vdoc ${FILESDIR}/data_files_citations.html
+	vdoc ${FILESDIR}/README.voidlinux
+	mv ${DESTDIR}/${DS_PATH}/README* ${DESTDIR}/usr/share/doc/${pkgname}
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}

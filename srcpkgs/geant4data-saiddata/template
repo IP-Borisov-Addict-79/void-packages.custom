@@ -1,0 +1,39 @@
+# Template file for 'geant4data-saiddata'
+pkgname=geant4data-saiddata
+version=2.0
+revision=1
+depends="bash"
+short_desc="Geant4 - nucleon cross sections"
+maintainer="Artem Sabourov <vs.tema@gmail.com>"
+license="Geant4 software license"
+restricted=yes
+repository=nonfree
+homepage="http://geant4.cern.ch/"
+
+DS_NAME=G4SAIDDATA
+DS_ENV=G4SAIDXSDATA
+distfiles="https://cern.ch/geant4-data/datasets/${DS_NAME}.${version}.tar.gz"
+checksum=1d26a8e79baa71e44d5759b9f55a67e8b7ede31751316a9e9037d80090c72e91
+
+DS_PATH=usr/share/Geant4/data/${DS_NAME}${version}
+
+do_install() {
+	# install license
+	vlicense ${FILESDIR}/LICENSE
+	#
+	# install dataset
+	install -d ${DESTDIR}/${DS_PATH}
+	install -m644 *.dat ${DESTDIR}/${DS_PATH}
+	#
+	# install docs
+	for F in Eta Etan Etap Etapn KN NN gN piN pipiN; do
+		vdoc README_${F}
+	done
+	vdoc History
+	vdoc ${FILESDIR}/data_files_citations.html
+	#
+	# create dataset init script
+	install -d ${DESTDIR}/etc/profile.d
+	echo "export ${DS_ENV}=/${DS_PATH}" > ${pkgname}-${version}.sh
+	install -m755 ${pkgname}-${version}.sh ${DESTDIR}/etc/profile.d
+}
