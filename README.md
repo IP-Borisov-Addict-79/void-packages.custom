@@ -23,11 +23,9 @@ Package list:
    git clone https://github.com/void-linux/void-packages.git`
    ```
    
-   2.1 To allow installing non-free packages, add following line to `etc/conf` file:
+   2.1 To allow installation of non-free packages, add following line in `etc/conf`:
    
-       ```
        XBPS_ALLOW_RESTRICTED=yes
-       ```
    
 3. Bootstrap the `masterdir`:
 
@@ -60,7 +58,7 @@ Package list:
    xi -f clhep-all
    ```
    
-2. Add `clhep` - `libCLHEP*.so` mapping to the `common/shlibs` file:
+2. Add `clhep` - `libCLHEP*.so` mapping in `common/shlibs`:
 
    ```
    libCLHEP-2.4.7.1.so clhep-2.4.7.1_1
@@ -76,13 +74,11 @@ Package list:
    
    3.1 Install packages with essential data:
    
-       ```
-       xi -f geant4data-saiddata geant4data-particlexs geant4data-ensdfstate \
-           geant4data-extra geant4data-channeling geant4data-tendl \
+       xi -f geant4data-saiddata geant4data-particlexs \
+           geant4data-ensdfstate geant4data-channeling geant4data-tendl \
            geant4data-radioactivedecay geant4data-pii geant4data-realsurface \
            geant4data-abla geant4data-incl geant4data-emlow \
            geant4data-photonevaporation
-       ```
 
 4. Build and install complete set of Geant4:
 
